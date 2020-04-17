@@ -84,11 +84,7 @@ def decode_caesar(args, string):
 def encode_vigenere(args):
 	input_string = search_file(args.input_file)
 	length_input_string = len(input_string)
-	#Up_register_letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	#for i in range(length_input_string):
-		#if (Lower_register_letter.find(input_string[i].lower()) != -1):
-			#string_only_letter += input_string[i]
 	k = 0
 	output_string = str()
 	length_key = len(args.key)
@@ -113,11 +109,7 @@ def encode_vigenere(args):
 def decode_vigenere(args):
 	input_string = search_file(args.input_file)
 	length_input_string = len(input_string)
-	#Up_register_letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	#for i in range(length_input_string):
-		#if (Lower_register_letter.find(input_string[i].lower()) != -1):
-			#string_only_letter += input_string[i]
 	k = 0
 	output_string = str()
 	length_key = len(args.key)
@@ -211,7 +203,6 @@ if (args.mode == 'train'):
 if (args.mode == 'hack'):
 	output_string = hack_cipher_caesar(args)
 	search_output_file(args.output_file, output_string)
-print(args)
 
 
 
