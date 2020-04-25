@@ -1,8 +1,9 @@
 #!/usr/bin/env python3.6
 import argparse
 import json
+import string
 
-def createParser():
+def create_parser():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('mode', type = str)
 	parser.add_argument('--cipher', default = '', type = str)
@@ -29,135 +30,118 @@ def search_output_file(name_output_file, output_string):
 	else:
 		print(output_string)
 
+def encode_or_decode_caesar(args, input_string, is_encode_caesar):
+    length = len(input_string)
+    output_string = str()
+    for i in range(length):
+        letter = input_string[i]
+        if (LOWER_REGISTER_LETTER.find(letter.lower())) == -1:
+            output_string += letter
+        elif (LOWER_REGISTER_LETTER.find(letter)) != -1:
+            i = LOWER_REGISTER_LETTER.find(letter)
+            was_Lower_letter = True
+        else:
+            i = UP_REGISTER_LETTER.find(letter)
+            was_Lower_letter = False
+        if (LOWER_REGISTER_LETTER.find(letter.lower())) != -1:
+            if (is_encode_caesar == True):
+                new_i = (i + int(args.key)) % size
+            else:
+                new_i = (i - int(args.key)) % size
+            if (was_Lower_letter == True):
+                output_string += LOWER_REGISTER_LETTER[new_i]
+            else:
+                output_string += UP_REGISTER_LETTER[new_i]
+    return output_string
+
 def encode_caesar(args):
-	input_string = search_file(args.input_file)
-	Up_register_letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	length = len(input_string)
-	output_string = str()
-	for i in range(length):
-		letter = input_string[i]
-		if (Lower_register_letter.find(letter.lower())) == -1:
-			output_string += letter
-		elif (Lower_register_letter.find(letter)) != -1:
-			i = Lower_register_letter.find(letter)
-			was_Lower_letter = True
-		else:
-			i = Up_register_letter.find(letter)
-			was_Lower_letter = False
-		if (Lower_register_letter.find(letter.lower())) != -1:
-			new_i = (i + int(args.key)) % 26
-			if (was_Lower_letter == True):
-				output_string += Lower_register_letter[new_i]
-			else:
-				output_string += Up_register_letter[new_i]
-	return output_string
+    input_string = search_file(args.input_file)
+    is_encode_caesar = True
+    output_string = encode_or_decode_caesar(args, input_string, is_encode_caesar)
+    return output_string
 			
 
 def decode_caesar(args, string):
-	if (string == ''):
-		input_string = search_file(args.input_file)
-	else:
-		input_string = string
-	Up_register_letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	length = len(input_string)
-	output_string = str()
-	for i in range(length):
-		letter = input_string[i]
-		if (Lower_register_letter.find(letter.lower())) == -1:
-			output_string += letter
-		elif (Lower_register_letter.find(letter)) != -1:
-			i = Lower_register_letter.find(letter)
-			was_Lower_letter = True
-		else:
-			i = Up_register_letter.find(letter)
-			was_Lower_letter = False
-		if (Lower_register_letter.find(letter.lower())) != -1:
-			new_i = (i - int(args.key)) % 26
-			if (was_Lower_letter == True):
-				output_string += Lower_register_letter[new_i]
-			else:
-				output_string += Up_register_letter[new_i]
-	return output_string
+    if (string == ''):
+        input_string = search_file(args.input_file)
+    else:
+        input_string = string
+    is_encode_caesar = False
+    output_string = encode_or_decode_caesar(args, input_string, is_encode_caesar)
+    return output_string
 
 def encode_vigenere(args):
 	input_string = search_file(args.input_file)
 	length_input_string = len(input_string)
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
 	k = 0
 	output_string = str()
 	length_key = len(args.key)
 	for i in range(length_input_string):
-		if (Lower_register_letter.find(input_string[i].lower()) == -1):
+		if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
 			output_string += input_string[i]
 		else:
 			if (input_string[i].islower() == True):
 				was_is_letter_lower_register = True
 			else:
 				was_is_letter_lower_register = False
-			j = Lower_register_letter.find(input_string[i].lower())
-			j_key = Lower_register_letter.find(args.key[k % length_key].lower())
-			new_j = (j + j_key) % 26
+			j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
+			j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
+			new_j = (j + j_key) % size
 			if (was_is_letter_lower_register == True):
-				output_string += Lower_register_letter[new_j]
+				output_string += LOWER_REGISTER_LETTER[new_j]
 			else:
-				output_string += Lower_register_letter[new_j].upper()
+				output_string += LOWER_REGISTER_LETTER[new_j].upper()
 			k += 1
 	return output_string
 
 def decode_vigenere(args):
 	input_string = search_file(args.input_file)
 	length_input_string = len(input_string)
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
 	k = 0
 	output_string = str()
 	length_key = len(args.key)
 	for i in range(length_input_string):
-		if (Lower_register_letter.find(input_string[i].lower()) == -1):
+		if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
 			output_string += input_string[i]
 		else:
 			if (input_string[i].islower() == True):
 				was_is_letter_lower_register = True
 			else:
 				was_is_letter_lower_register = False
-			j = Lower_register_letter.find(input_string[i].lower())
-			j_key = Lower_register_letter.find(args.key[k % length_key].lower())
-			new_j = (j - j_key) % 26
+			j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
+			j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
+			new_j = (j - j_key) % size
 			if (was_is_letter_lower_register == True):
-				output_string += Lower_register_letter[new_j]
+				output_string += LOWER_REGISTER_LETTER[new_j]
 			else:
-				output_string += Lower_register_letter[new_j].upper()
+				output_string += LOWER_REGISTER_LETTER[new_j].upper()
 			k += 1
 	return output_string
 
 def train_file(args):
-	input_string = search_file(args.text_file)
-	d = {}
-	d = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0, 'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0, 'u': 0, 'v': 0, 'w': 0, 'x': 0, 'y': 0, 'z': 0}
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	length_input_string = len(input_string)
-	for i in range(length_input_string):
-		if (Lower_register_letter.find(input_string[i].lower()) != -1):
-			d[input_string[i].lower()] += 1
-	json_string = json.dumps(d)
-	return json_string
+    input_string = search_file(args.text_file)
+    length_lower_register_letter = len(LOWER_REGISTER_LETTER)
+    d = {LOWER_REGISTER_LETTER[i]: 0 for i in range(length_lower_register_letter)}
+    length_input_string = len(input_string)
+    for i in range(length_input_string):
+        if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) != -1):
+            d[input_string[i].lower()] += 1
+    json_string = json.dumps(d)
+    return json_string
 
 def search_letter(output_string):
-	d = {}
-	d = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0, 'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0, 'u': 0, 'v': 0, 'w': 0, 'x': 0, 'y': 0, 'z': 0}
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
-	length_output_string = len(output_string)
-	for i in range(length_output_string):
-		if (Lower_register_letter.find(output_string[i].lower()) != -1):
-			d[output_string[i].lower()] += 1
-	return d
+    length_lower_register_letter = len(LOWER_REGISTER_LETTER)
+    d = {LOWER_REGISTER_LETTER[i]: 0 for i in range(length_lower_register_letter)}
+    length_output_string = len(output_string)
+    for i in range(length_output_string):
+        if (LOWER_REGISTER_LETTER.find(output_string[i].lower()) != -1):
+            d[output_string[i].lower()] += 1
+    return d
 
 def search_rating_key(rating_key, dict_key, model_dict):
-	Lower_register_letter = "abcdefghijklmnopqrstuvwxyz"
 	result = 0
-	for i in range(26):
-		result += (model_dict[Lower_register_letter[i]] - dict_key[Lower_register_letter[i]]) ** 2
+	for i in range(size):
+		result += (model_dict[LOWER_REGISTER_LETTER[i]] - dict_key[LOWER_REGISTER_LETTER[i]]) ** 2
 	rating_key.append(result)
 	return rating_key
 
@@ -174,7 +158,7 @@ def hack_cipher_caesar(args):
 		rating_key = search_rating_key(rating_key, dict_key, model_dict)
 	min_rating = rating_key[0]
 	k = 0
-	for i in range(1, 26):
+	for i in range(1, size):
 		if (rating_key[i] < min_rating):
 			min_rating = rating_key[i]
 			k = i
@@ -183,8 +167,11 @@ def hack_cipher_caesar(args):
 	return output_string	
 	
 
-parser = createParser()
+parser = create_parser()
 args = parser.parse_args()
+LOWER_REGISTER_LETTER = string.ascii_lowercase
+UP_REGISTER_LETTER = string.ascii_uppercase
+size = 26
 if (args.mode == 'encode' and args.cipher == 'caesar'):
 	output_string = encode_caesar(args)
 	search_output_file(args.output_file, output_string)
@@ -203,7 +190,6 @@ if (args.mode == 'train'):
 if (args.mode == 'hack'):
 	output_string = hack_cipher_caesar(args)
 	search_output_file(args.output_file, output_string)
-
 
 
 
