@@ -4,31 +4,31 @@ import json
 import string
 
 def create_parser():
-	parser = argparse.ArgumentParser()
-	parser.add_argument('mode', type = str)
-	parser.add_argument('--cipher', default = '', type = str)
-	parser.add_argument("--key", default = '', type = str)
-	parser.add_argument("--input-file", default = '', type = str)
-	parser.add_argument("--output-file", default = '', type = str)
-	parser.add_argument('--text-file', default = '', type = str)
-	parser.add_argument('--model-file', default = '', type = str)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('mode', type = str)
+    parser.add_argument('--cipher', default = '', type = str)
+    parser.add_argument("--key", default = '', type = str)
+    parser.add_argument("--input-file", default = '', type = str)
+    parser.add_argument("--output-file", default = '', type = str)
+    parser.add_argument('--text-file', default = '', type = str)
+    parser.add_argument('--model-file', default = '', type = str)
 	
-	return parser
+    return parser
 
 def search_file(name_file):
-	if (name_file == ''):
-		input_string = input()
-	else:
-		with open(name_file,'r') as file_reading:	
-			input_string= ''.join(line for line in file_reading)
-	return input_string
+    if (name_file == ''):
+        input_string = input()
+    else:
+        with open(name_file,'r') as file_reading:	
+            input_string= ''.join(line for line in file_reading)
+    return input_string
 
 def search_output_file(name_output_file, output_string):
-	if (name_output_file != ''):
-		with open(name_output_file, 'w') as file_writting:
-			file_writting.write(output_string)
-	else:
-		print(output_string)
+    if (name_output_file != ''):
+        with open(name_output_file, 'w') as file_writting:
+            file_writting.write(output_string)
+    else:
+        print(output_string)
 
 def encode_or_decode_caesar(args, input_string, is_encode_caesar):
     length = len(input_string)
