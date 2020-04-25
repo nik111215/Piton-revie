@@ -71,52 +71,52 @@ def decode_caesar(args, string):
     return output_string
 
 def encode_vigenere(args):
-	input_string = search_file(args.input_file)
-	length_input_string = len(input_string)
-	k = 0
-	output_string = str()
-	length_key = len(args.key)
-	for i in range(length_input_string):
-		if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
-			output_string += input_string[i]
-		else:
-			if (input_string[i].islower() == True):
-				was_is_letter_lower_register = True
-			else:
-				was_is_letter_lower_register = False
-			j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
-			j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
-			new_j = (j + j_key) % size
-			if (was_is_letter_lower_register == True):
-				output_string += LOWER_REGISTER_LETTER[new_j]
-			else:
-				output_string += LOWER_REGISTER_LETTER[new_j].upper()
-			k += 1
-	return output_string
+    input_string = search_file(args.input_file)
+    length_input_string = len(input_string)
+    k = 0
+    output_string = str()
+    length_key = len(args.key)
+    for i in range(length_input_string):
+        if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
+            output_string += input_string[i]
+        else:
+            if (input_string[i].islower() == True):
+                was_is_letter_lower_register = True
+            else:
+                was_is_letter_lower_register = False
+            j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
+            j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
+            new_j = (j + j_key) % size
+            if (was_is_letter_lower_register == True):
+                output_string += LOWER_REGISTER_LETTER[new_j]
+            else:
+                output_string += LOWER_REGISTER_LETTER[new_j].upper()
+            k += 1
+    return output_string
 
 def decode_vigenere(args):
-	input_string = search_file(args.input_file)
-	length_input_string = len(input_string)
-	k = 0
-	output_string = str()
-	length_key = len(args.key)
-	for i in range(length_input_string):
-		if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
-			output_string += input_string[i]
-		else:
-			if (input_string[i].islower() == True):
-				was_is_letter_lower_register = True
-			else:
-				was_is_letter_lower_register = False
-			j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
-			j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
-			new_j = (j - j_key) % size
-			if (was_is_letter_lower_register == True):
-				output_string += LOWER_REGISTER_LETTER[new_j]
-			else:
-				output_string += LOWER_REGISTER_LETTER[new_j].upper()
-			k += 1
-	return output_string
+    input_string = search_file(args.input_file)
+    length_input_string = len(input_string)
+    k = 0
+    output_string = str()
+    length_key = len(args.key)
+    for i in range(length_input_string):
+        if (LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1):
+            output_string += input_string[i]
+        else:
+            if (input_string[i].islower() == True):
+                was_is_letter_lower_register = True
+            else:
+                was_is_letter_lower_register = False
+            j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
+            j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
+            new_j = (j - j_key) % size
+            if (was_is_letter_lower_register == True):
+                output_string += LOWER_REGISTER_LETTER[new_j]
+            else:
+                output_string += LOWER_REGISTER_LETTER[new_j].upper()
+            k += 1
+    return output_string
 
 def train_file(args):
     input_string = search_file(args.text_file)
@@ -139,32 +139,32 @@ def search_letter(output_string):
     return d
 
 def search_rating_key(rating_key, dict_key, model_dict):
-	result = 0
-	for i in range(size):
-		result += (model_dict[LOWER_REGISTER_LETTER[i]] - dict_key[LOWER_REGISTER_LETTER[i]]) ** 2
-	rating_key.append(result)
-	return rating_key
+    result = 0
+    for i in range(size):
+        result += (model_dict[LOWER_REGISTER_LETTER[i]] - dict_key[LOWER_REGISTER_LETTER[i]]) ** 2
+    rating_key.append(result)
+    return rating_key
 
 
 def hack_cipher_caesar(args):
-	input_string = search_file(args.input_file)
-	with open(args.model_file, 'r') as json_file:
-		model_dict = json.load(json_file)
-	rating_key = []
-	for i in range(1, 27):
-		args.key = str(i)	
-		output_string = decode_caesar(args, input_string)
-		dict_key = search_letter(output_string)
-		rating_key = search_rating_key(rating_key, dict_key, model_dict)
-	min_rating = rating_key[0]
-	k = 0
-	for i in range(1, size):
-		if (rating_key[i] < min_rating):
-			min_rating = rating_key[i]
-			k = i
-	args.key = str(k)	
-	output_string = decode_caesar(args, input_string)
-	return output_string	
+    input_string = search_file(args.input_file)
+    with open(args.model_file, 'r') as json_file:
+        model_dict = json.load(json_file)
+    rating_key = []
+    for i in range(1, 27):
+        args.key = str(i)	
+        output_string = decode_caesar(args, input_string)
+        dict_key = search_letter(output_string)
+        rating_key = search_rating_key(rating_key, dict_key, model_dict)
+    min_rating = rating_key[0]
+    k = 0
+    for i in range(1, size):
+        if (rating_key[i] < min_rating):
+            min_rating = rating_key[i]
+            k = i
+    args.key = str(k)	
+    output_string = decode_caesar(args, input_string)
+    return output_string	
 	
 
 parser = create_parser()
@@ -173,23 +173,23 @@ LOWER_REGISTER_LETTER = string.ascii_lowercase
 UP_REGISTER_LETTER = string.ascii_uppercase
 size = 26
 if (args.mode == 'encode' and args.cipher == 'caesar'):
-	output_string = encode_caesar(args)
-	search_output_file(args.output_file, output_string)
+    output_string = encode_caesar(args)
+    search_output_file(args.output_file, output_string)
 if (args.mode == 'decode' and args.cipher == 'caesar'):
-	output_string = decode_caesar(args, '')
-	search_output_file(args.output_file, output_string)
+    output_string = decode_caesar(args, '')
+    search_output_file(args.output_file, output_string)
 if (args.mode == 'encode' and args.cipher == 'vigenere'):
-	output_string = encode_vigenere(args)
-	search_output_file(args.output_file, output_string)
+    output_string = encode_vigenere(args)
+    search_output_file(args.output_file, output_string)
 if (args.mode == 'decode' and args.cipher == 'vigenere'):
-	output_string = decode_vigenere(args)
-	search_output_file(args.output_file, output_string)
+    output_string = decode_vigenere(args)
+    search_output_file(args.output_file, output_string)
 if (args.mode == 'train'):
-	json_string = train_file(args)
-	search_output_file(args.model_file, json_string)
+    json_string = train_file(args)
+    search_output_file(args.model_file, json_string)
 if (args.mode == 'hack'):
-	output_string = hack_cipher_caesar(args)
-	search_output_file(args.output_file, output_string)
+    output_string = hack_cipher_caesar(args)
+    search_output_file(args.output_file, output_string)
 
 
 
