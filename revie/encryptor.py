@@ -166,6 +166,38 @@ def hack_cipher_caesar(args):
     output_string = decode_caesar(args, input_string)
     return output_string	
 	
+#def search_symbol(symbol):
+#    int_symbol = ord(symbol)
+    
+
+#def extension_max(binary_symbol_input_string, binary_symbol_key):
+#    difference = len(binary_symbol_input_string) > len(binary_symbol_key)
+#    if (difference > 0):
+#        binary_symbol_key = '0' * difference + binary_symbol_key
+#    else:
+#        binary_symbol_input_string = '0' * abs(difference) + binary_symbol_input_string
+
+#def getting_encrypt(binary_symbol_input_string, binary_symbol_key):
+#    length = len(binary_symbol_key)
+#    result = ''
+#    for i in range(length):
+#        result += str(int(binary_symbol_input_string) ^ int(binary_symbol_key))
+#    result_letter = chr(int(result, 2))
+#    return result_letter
+
+def encode_vermana(args):
+    input_string = search_file(args.input_file)
+    length_input_string = len(input_string)
+    result_string = ''
+    for i in range(length_input_string):
+        symbol_input_string = input_string[i]
+        symbol_key = args.key[i]
+        int_symbol_input_string = ord(symbol_input_string) 		
+        int_symbol_key = ord(symbol_key)
+        result_symbol = int_symbol_input_string ^ int_symbol_key 
+        result_string += chr(result_symbol)
+    return result_string
+
 
 parser = create_parser()
 args = parser.parse_args()
@@ -189,6 +221,9 @@ if (args.mode == 'train'):
     search_output_file(args.model_file, json_string)
 if (args.mode == 'hack'):
     output_string = hack_cipher_caesar(args)
+    search_output_file(args.output_file, output_string)
+if (args.mode == 'encode' and args.cipher == 'vermana'):
+    output_string = encode_vermana(args)
     search_output_file(args.output_file, output_string)
 
 
