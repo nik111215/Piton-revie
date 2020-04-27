@@ -225,7 +225,7 @@ if (args.mode == 'hack'):
 if (args.mode == 'encode' and args.cipher == 'vermana'):
     output_string = encode_or_decode_vermana(args)
     search_output_file(args.output_file, output_string)
-if (args.mode == 'decode' and args.cipher == 'vermaan'):
+if (args.mode == 'decode' and args.cipher == 'vermana'):
     output_string = encode_or_decode_vermana(args)
     search_output_file(args,output_file, output_string)
 
