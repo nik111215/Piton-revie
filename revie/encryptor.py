@@ -185,7 +185,7 @@ def hack_cipher_caesar(args):
 #    result_letter = chr(int(result, 2))
 #    return result_letter
 
-def encode_vermana(args):
+def encode_or_decode_vermana(args):
     input_string = search_file(args.input_file)
     length_input_string = len(input_string)
     result_string = ''
@@ -223,8 +223,11 @@ if (args.mode == 'hack'):
     output_string = hack_cipher_caesar(args)
     search_output_file(args.output_file, output_string)
 if (args.mode == 'encode' and args.cipher == 'vermana'):
-    output_string = encode_vermana(args)
+    output_string = encode_or_decode_vermana(args)
     search_output_file(args.output_file, output_string)
+if (args.mode == 'decode' and args.cipher == 'vermaan'):
+    output_string = encode_or_decode_vermana(args)
+    search_output_file(args,output_file, output_string)
 
 
 
