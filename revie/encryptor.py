@@ -22,7 +22,7 @@ def create_parser():
 
 
 def search_file(name_file):
-    if name_file == None:
+    if name_file is None:
         input_string = input()
     else:
         with open(name_file,'r') as file_reading:	
@@ -31,7 +31,7 @@ def search_file(name_file):
 
 
 def search_output_file(name_output_file, output_string):
-    if name_output_file != None:
+    if name_output_file is not None:
         with open(name_output_file, 'w') as file_writting:
             file_writting.write(output_string)
     else:
@@ -39,17 +39,17 @@ def search_output_file(name_output_file, output_string):
 
 
 def encode_or_decode_caesar(args, input_string, is_encode_caesar):
-    output_string = ""
     index = -1
     l = []
-    for i, letter in enumerate(input_string):
-        was_lower_letter = letter.islower()
-        if LOWER_REGISTER_LETTER.find(letter.lower()) == -1:
+    for i, letter in enumerate(input_string):#проход по исходной строке
+        was_lower_letter = letter.islower()#если буква строчная, то истинна, иначе ложь
+        index_lower_letter = LOWER_REGISTER_LETTER.find(letter.lower())
+        if index_lower_letter == -1:#РАСПОЗНОВАНИЕ СИМВОЛА 
             l += str(letter)
-        if LOWER_REGISTER_LETTER.find(letter.lower()) != -1:
-            index = LOWER_REGISTER_LETTER.find(letter.lower())
+        else:
+            index = index_lower_letter
         if index != -1:
-            if is_encode_caesar:
+            if is_encode_caesar:#проверка какая именно функция
                 new_i = (index + int(args.key)) % ALPHABET_SIZE	
             else:
                 new_i = (index - int(args.key)) % ALPHABET_SIZE
@@ -67,11 +67,8 @@ def encode_caesar(args):
     return output_string
 			
 
-def decode_caesar(args, string):
-    if string == None:
-        input_string = search_file(args.input_file)
-    else:
-        input_string = string
+def decode_caesar(args):
+    input_string = search_file(args.input_file)
     output_string = encode_or_decode_caesar(args, input_string, is_encode_caesar = False)
     return output_string
 
@@ -83,12 +80,12 @@ def encode_or_decode_vigenere(args, is_encode_vigenere):
     output_string = ""
     l = []
     length_key = len(args.key)
-    for i in range(length_input_string):
-        if LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1:
+    for i,letter in enumerate(length_input_string):
+        if LOWER_REGISTER_LETTER.find(letter.lower()) == -1:
             l += str(input_string[i])
         else:
-            was_is_letter_lower_register = input_string[i].islower();
-            j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
+            was_is_letter_lower_register = letter.islower();
+            j = LOWER_REGISTER_LETTER.find(letter.lower())
             j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
             if is_encode_vigenere:
                 new_j = (j + j_key) % ALPHABET_SIZE
@@ -103,34 +100,10 @@ def encode_or_decode_vigenere(args, is_encode_vigenere):
     return output_string
 
 
-#def decode_vigenere(args):
-#    input_string = search_file(args.input_file)
-#    length_input_string = len(input_string)
-#    k = 0
- #   output_string = ""
-  #  l = []
-   # length_key = len(args.key)
-    #for i in range(length_input_string):
-#        if LOWER_REGISTER_LETTER.find(input_string[i].lower()) == -1:
- #           l += str(input_string[i])
-  #      else:
-   #         was_is_letter_lower_register = input_string[i].islower()
-    #        j = LOWER_REGISTER_LETTER.find(input_string[i].lower())
-     #       j_key = LOWER_REGISTER_LETTER.find(args.key[k % length_key].lower())
-      #      new_j = (j - j_key) % ALPHABET_SIZE
-       #     if was_is_letter_lower_register:
-        #        l += LOWER_REGISTER_LETTER[new_j]
-         #   else:
-          #      l += LOWER_REGISTER_LETTER[new_j].upper()
-           # k += 1
-#    output_string = ''.join(l)
- #   return output_string
-
-
 def train_file(args):
     input_string = search_file(args.text_file)
     length_lower_register_letter = len(LOWER_REGISTER_LETTER)
-    d = {letter	: 0 for letter in LOWER_REGISTER_LETTER}
+    d = {letter : 0 for letter in LOWER_REGISTER_LETTER}
     length_input_string = len(input_string)
     for i in range(length_input_string):
         if LOWER_REGISTER_LETTER.find(input_string[i].lower()) != -1:
@@ -142,9 +115,9 @@ def search_letter(output_string):
     length_lower_register_letter = len(LOWER_REGISTER_LETTER)
     d = {LOWER_REGISTER_LETTER[i]: 0 for i in range(length_lower_register_letter)}
     length_output_string = len(output_string)
-    for i in range(length_output_string):
-        if LOWER_REGISTER_LETTER.find(output_string[i].lower()) != -1:
-            d[output_string[i].lower()] += 1
+    for letter in length_output_string:
+        if LOWER_REGISTER_LETTER.find(letter.lower()) != -1:
+            d[letter.lower()] += 1
     return d
 
 
@@ -205,7 +178,7 @@ if args.mode == 'encode':
         output_string = encode_or_decode_vermana(args)
 if args.mode == 'decode':
     if args.cipher == 'caesar':
-        output_string = decode_caesar(args, '')
+        output_string = decode_caesar(args)
     elif rgs.cipher == 'vigenere':
         output_string = encode_or_decode_vigenere(args, is_encode_vigenere = False)
     else:
@@ -216,5 +189,5 @@ if args.mode == 'train':
     search_output_file(args.model_file, json_string)
 if args.mode == 'hack':
     output_string = hack_cipher_caesar(args)
-    search_output_file(args.output_file, output_string)        
+    search_output_file(args.output_file, output_string)       
 
