@@ -3,6 +3,7 @@ import argparse
 import json
 import string
 
+from collections import defaultdict 
 
 LOWER_REGISTER_LETTER = string.ascii_lowercase
 UP_REGISTER_LETTER = string.ascii_uppercase
@@ -102,8 +103,11 @@ def encode_or_decode_vigenere(args, is_encode_vigenere):
 
 def train_file(args):
     input_string = search_file(args.text_file)
-    length_lower_register_letter = len(LOWER_REGISTER_LETTER)
-    d = {letter : 0 for letter in LOWER_REGISTER_LETTER}
+    #length_lower_register_letter = len(LOWER_REGISTER_LETTER)
+    d = defaultdict(list)
+    for i, letter in enumerate(LOWER_REGISTER_LETTER):
+        d[letter] = i
+    #d = {letter : 0 for letter in LOWER_REGISTER_LETTER}
     length_input_string = len(input_string)
     for i in range(length_input_string):
         if LOWER_REGISTER_LETTER.find(input_string[i].lower()) != -1:
@@ -112,8 +116,11 @@ def train_file(args):
 
 
 def search_letter(output_string):
-    length_lower_register_letter = len(LOWER_REGISTER_LETTER)
-    d = {LOWER_REGISTER_LETTER[i]: 0 for i in range(length_lower_register_letter)}
+    #length_lower_register_letter = len(LOWER_REGISTER_LETTER)
+    d = defaultdict(list)
+    for i, letter in enumerate(LOWER_REGISTER_LETTER):
+        d[letter] = i
+    #d = {LOWER_REGISTER_LETTER[i]: 0 for i in range(length_lower_register_letter)}
     length_output_string = len(output_string)
     for letter in length_output_string:
         if LOWER_REGISTER_LETTER.find(letter.lower()) != -1:
