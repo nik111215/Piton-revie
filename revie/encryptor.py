@@ -27,7 +27,7 @@ def search_file(name_file):
         input_string = input()
     else:
         with open(name_file,'r') as file_reading:	
-            input_string= ''.join(line for line in file_reading)
+            input_string= file_reading.read()
     return input_string
 
 
