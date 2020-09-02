@@ -12,14 +12,37 @@ ALPHABET_SIZE = len(string.ascii_lowercase)
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('mode', type = str)
-    parser.add_argument('--cipher', default = None, type = str)
-    parser.add_argument("--key", default = None, type = str)
-    parser.add_argument("--input-file", default = None, type = str)
-    parser.add_argument("--output-file", default = None, type = str)
-    parser.add_argument('--text-file', default = None, type = str)
-    parser.add_argument('--model-file', default = None, type = str)	
-    return parser
+    subparsers = parser.add_subparsers()
+
+    parser_encode = subparsers.add_parser('encode')
+    parser_encode.set_defaults(mode = 'encode')
+    parser_encode.add_argument('--cipher')
+    parser_encode.add_argument('--key')
+    parser_encode.add_argument('--input-file')
+    parser_encode.add_argument('--output-file')
+
+    parser_decode = subparsers.add_parser('decode')
+    parser_decode.set_defaults(mode = 'decode')
+    parser_decode.add_argument('--cipher')
+    parser_decode.add_argument('--key')
+    parser_decode.add_argument('--input-file')
+    parser_decode.add_argument('--output-file')
+
+
+    parser_hack = subparsers.add_parser('hack')
+    parser_hack.set_defaults(mode = 'hack')
+    parser_hack.add_argument('--cipher')
+    parser_hack.add_argument('--key')
+    parser_hack.add_argument('--input-file')
+    parser_hack.add_argument('--output-file')
+    parser_hack.add_argument('--model-file')
+
+    parser_train = subparsers.add_parser('train')
+    parser_train.set_defaults(mode = 'train')
+    parser_train.add_argument('-text-file')
+    parser_train.add_argument('--output-file')
+
+    return parser.parse_args()
 
 
 def search_file(name_file):
@@ -170,8 +193,7 @@ def encode_or_decode_vermana(args):
     return result_string
 
 
-parser = create_parser()
-args = parser.parse_args()
+args = create_parser()
 if args.mode == 'encode':
     if args.cipher == 'caesar':
         output_string = encode_caesar(args)
