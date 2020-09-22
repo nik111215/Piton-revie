@@ -147,30 +147,30 @@ def search_letter(output_string):
     return d
 
 
-def search_rating_key(rating_key, dict_key, model_dict, ofset):
+def search_rating_key(dict_key, model_dict, offset):
     result = 0
     for i in range(ALPHABET_SIZE):
-        result += (model_dict[LOWER_REGISTER_LETTER[i + ofset]] - dict_key[LOWER_REGISTER_LETTER[i]]) ** 2
-    rating_key.append(result)
-    return rating_key
+        result += (model_dict[LOWER_REGISTER_LETTER[i + offset]] - dict_key[LOWER_REGISTER_LETTER[i]]) ** 2
+    return result
 
 
 def hack_cipher_caesar(args):
     input_string = search_file(args.input_file)
     with open(args.model_file, 'r') as json_file:
         model_dict = json.load(json_file)
-    rating_key = []
+    rating_key = 0;
     args.key = str(i)	
     output_string = decode_caesar(args, input_string)
     dict_key = search_letter(output_string)
-    rating_key = search_rating_key(rating_key, dict_key, model_dict, ofset = 0)
+    rating_key = search_rating_key(dict_key, model_dict, offset = 0)
     for i in range(2, ALPHABET_SIZE + 1):
-        rating_key = search_rating_key(rating_key, dict_key, model_dict, ofset = i)
-    min_rating = rating_key[0]
+        rating_key = search_rating_key(dict_key, model_dict, offset = i)
+    
+    min_rating = rating_key
     k = 0
     for i in range(1, ALPHABET_SIZE):
-        if rating_key[i] < min_rating:
-            min_rating = rating_key[i]
+        if rating_key < min_rating:
+            min_rating = rating_key
             k = i
     args.key = str(k)	
     output_string = decode_caesar(args, input_string)
